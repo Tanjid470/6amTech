@@ -1,7 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
-import 'package:six_am_tech_task/core/utils/config/responsive_scale.dart';
-import 'package:six_am_tech_task/core/utils/config/size_config.dart';
+import 'package:six_am_tech_task/config/responsive_scale.dart';
+import 'package:six_am_tech_task/config/size_config.dart';
 
 class FontConstants{
   static double appTextLS = -0.4;
