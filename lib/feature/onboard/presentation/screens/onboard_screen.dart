@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:six_am_tech_task/config/font_constant.dart';
 import 'package:six_am_tech_task/core/utils/const/app_colors.dart';
 import 'package:six_am_tech_task/feature/onboard/presentation/controller/onboard_controller.dart';
+import 'package:six_am_tech_task/feature/onboard/presentation/screens/widget/food_campaign_card.dart';
 import 'package:six_am_tech_task/feature/onboard/presentation/screens/widget/popular_food_card.dart';
 import 'package:six_am_tech_task/shared/widgets/custom_searcher.dart';
 import 'package:six_am_tech_task/shared/widgets/header_row.dart';
@@ -52,7 +53,10 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          popularFoodNearby()
+          popularFoodNearby(),
+          verticalGap(context, 2),
+          foodCampaign(),
+          Text(controller.allCampaign!.length.toString())
         ],
       ),
     );
@@ -235,6 +239,76 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
                   [],
             ),
           );
+        }),
+      ],
+    );
+  }
+
+  Widget foodCampaign(){
+    return Column(
+      children: [
+        HeaderRow(
+          title: 'Food Campaign',
+          actionText: 'View all',
+          onTap: () {
+            // handle tap
+          },
+        ),
+        verticalGap(context, 1),
+        Obx(() {
+          return controller.isLoadingCampaign.value == true
+              ? Skeletonizer(
+                enabled: true,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: List.generate(4, (index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: SizedBox(
+                          width: Get.width * 0.5,
+                          child: const FoodCampaignCard(
+                            title: "title",
+                            description: "description",
+                            imageUrl: "",
+                            originalPrice: 0,
+                            discount: 0,
+                          ),
+                        ),
+                      );
+                    }),
+                  ),
+                ),
+              )
+              : SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: controller.allCampaign
+                      ?.asMap()
+                      .entries
+                      .map((entry) {
+                    var foodCampaign = entry.value;
+                    final isSingle = controller.allPopularFood?.length == 1;
+
+                    return Padding(
+                      padding: EdgeInsets.only(right: isSingle ? 0 : 8),
+                      child: SizedBox(
+                        width: isSingle
+                            ? Get.width * 0.65
+                            : Get.width * 0.65,
+                        child: FoodCampaignCard(
+                          title: foodCampaign.name ?? "",
+                          description: foodCampaign.restaurantName ?? "",
+                          imageUrl: foodCampaign.imageFullUrl ?? "",
+                          originalPrice: foodCampaign.price ?? 0,
+                          discount: foodCampaign.discount ?? 0,
+                        ),
+                      ),
+                    );
+                  }).toList() ??
+                      [],
+                ),
+              );
         }),
       ],
     );
