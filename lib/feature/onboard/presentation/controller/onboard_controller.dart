@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:six_am_tech_task/feature/onboard/data/model/banners_response_body.dart';
+import 'package:six_am_tech_task/feature/onboard/data/model/campaign_response_body.dart';
 import 'package:six_am_tech_task/feature/onboard/data/model/popular_food_response_body.dart';
 import 'package:six_am_tech_task/feature/onboard/data/repository/onboard_repository.dart';
 
@@ -10,12 +11,15 @@ class OnBoardController extends GetxController {
   OnBoardRepository onBoardRepository = OnBoardRepository();
 
   List<Banners>? allBanners = [];
-  List<Category>? allCategories = [];
+ // List<Category>? allCategories = [];
   List<Products>? allPopularFood = [];
+  List<CampaignItem>? allCampaign = [];
+
 
   RxBool isLoadingBanners = false.obs;
   RxBool isLoadingCategories = false.obs;
   RxBool isLoadingPopularFood = false.obs;
+  RxBool isLoadingCampaign = false.obs;
 
 
   TextEditingController searchController = TextEditingController();
@@ -36,10 +40,10 @@ class OnBoardController extends GetxController {
 
   Future<void> getAllCategories() async {
     isLoadingCategories.value = true;
-    final result = await onBoardRepository.getCategories();
-    if (result != null) {
-      //allCategories = result;
-    }
+    // final result = await onBoardRepository.getCategories();
+    // if (result != null) {
+    //   //allCategories = result;
+    // }
     isLoadingCategories.value = false;
   }
 
@@ -52,9 +56,24 @@ class OnBoardController extends GetxController {
     isLoadingPopularFood.value = false;
   }
 
+  Future<void> getAllCampaign() async {
+    isLoadingCampaign.value = true;
+    try {
+      final result = await onBoardRepository.getCampaign(); // fetch campaigns
+      if (result != null) {
+        allCampaign = result; // assign to your list
+      }
+    } catch (e) {
+      debugPrint('Error fetching campaigns: $e');
+    } finally {
+      isLoadingCampaign.value = false;
+    }
+  }
+
   void initAll() {
     getAllBanners();
    // getAllCategories();
     getAllPopularFood();
+    getAllCampaign();
   }
 }
