@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:six_am_tech_task/feature/onboard/data/model/banners_response_body.dart';
 import 'package:six_am_tech_task/feature/onboard/data/model/campaign_response_body.dart';
+import 'package:six_am_tech_task/feature/onboard/data/model/categories_response_body.dart';
 import 'package:six_am_tech_task/feature/onboard/data/model/popular_food_response_body.dart';
 import 'package:six_am_tech_task/feature/onboard/data/repository/onboard_repository.dart';
 
@@ -11,7 +12,7 @@ class OnBoardController extends GetxController {
   OnBoardRepository onBoardRepository = OnBoardRepository();
 
   List<Banners>? allBanners = [];
- // List<Category>? allCategories = [];
+  List<Categories>? allCategories = [];
   List<Products>? allPopularFood = [];
   List<CampaignItem>? allCampaign = [];
 
@@ -40,10 +41,10 @@ class OnBoardController extends GetxController {
 
   Future<void> getAllCategories() async {
     isLoadingCategories.value = true;
-    // final result = await onBoardRepository.getCategories();
-    // if (result != null) {
-    //   //allCategories = result;
-    // }
+    final result = await onBoardRepository.getCategories();
+    if (result != null) {
+      allCategories = result;
+    }
     isLoadingCategories.value = false;
   }
 
@@ -59,9 +60,9 @@ class OnBoardController extends GetxController {
   Future<void> getAllCampaign() async {
     isLoadingCampaign.value = true;
     try {
-      final result = await onBoardRepository.getCampaign(); // fetch campaigns
+      final result = await onBoardRepository.getCampaign();
       if (result != null) {
-        allCampaign = result; // assign to your list
+        allCampaign = result;
       }
     } catch (e) {
       debugPrint('Error fetching campaigns: $e');
@@ -72,7 +73,7 @@ class OnBoardController extends GetxController {
 
   void initAll() {
     getAllBanners();
-   // getAllCategories();
+    getAllCategories();
     getAllPopularFood();
     getAllCampaign();
   }
