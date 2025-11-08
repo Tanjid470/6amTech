@@ -4,6 +4,7 @@ import 'package:six_am_tech_task/core/utils/const/url_conts.dart';
 import 'package:six_am_tech_task/core/utils/network/api_client.dart';
 import 'package:six_am_tech_task/core/utils/network/dio_header.dart';
 import 'package:six_am_tech_task/feature/onboard/data/model/banners_response_body.dart';
+import 'package:six_am_tech_task/feature/onboard/data/model/campaign_response_body.dart';
 import 'package:six_am_tech_task/feature/onboard/data/model/categories_response_body.dart';
 import 'package:six_am_tech_task/feature/onboard/data/model/popular_food_response_body.dart';
 
@@ -50,32 +51,22 @@ class OnBoardRepository {
     return null;
   }
 
-  Future<List<Category>?> getCategories() async {
+  Future<List<CampaignItem>?> getCampaign() async {
     try {
       dio = await ApiClient.dioClient(true);
       Response response = await dio.get(
-        UrlConst.categories,
+        UrlConst.foodCampaign,
         options: dioHeader(),
       );
 
       if (response.statusCode == 200) {
-
-        if (response.data is List) {
-          return (response.data as List)
-              .map((json) => Category.fromJson(json))
-              .toList();
-        }
-        else if (response.data['data'] != null && response.data['data'] is List) {
-          return (response.data['data'] as List)
-              .map((json) => Category.fromJson(json))
-              .toList();
-        }
+        return CampaignResponse.fromJson(response.data).campaigns;
       }
-      return null;
     } catch (e) {
       debugPrint(e.toString());
-      return null;
     }
+    return null;
   }
+
 
 }
