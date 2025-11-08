@@ -19,7 +19,7 @@ class HeaderRow extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(title, style: TextStyle(fontWeight: FontWeight.bold,fontSize: TextSize.font16(context))),
+        Text(title, style: TextStyle(fontWeight: FontWeight.bold,fontSize: TextSize.font18(context))),
         InkWell(
           onTap: onTap,
           child: Text(
