@@ -68,5 +68,22 @@ class OnBoardRepository {
     return null;
   }
 
+  Future<List<Categories>?> getCategories() async {
+    try {
+      dio = await ApiClient.dioClient(true);
+      Response response = await dio.get(
+        UrlConst.categories,
+        options: dioHeader(),
+      );
+
+      if (response.statusCode == 200) {
+        return CategoryResponse.fromJson(response.data).categories;
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return null;
+  }
+
 
 }
