@@ -5,6 +5,8 @@ import 'package:six_am_tech_task/config/font_constant.dart';
 import 'package:six_am_tech_task/core/utils/const/app_colors.dart';
 import 'package:six_am_tech_task/feature/onboard/presentation/controller/onboard_controller.dart';
 import 'package:six_am_tech_task/shared/widgets/custom_searcher.dart';
+import 'package:six_am_tech_task/shared/widgets/header_row.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class OnBoardScreen extends StatefulWidget {
   const OnBoardScreen({super.key});
@@ -18,7 +20,7 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
 
   @override
   void initState() {
-    controller.getAllBanners();
+    controller.initAll();
     super.initState();
   }
 
@@ -32,22 +34,12 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
             verticalGap(context, 5),
             appBar(),
             verticalGap(context, 2),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 0.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  CustomSearcher(
-                    controller: controller.searchController,
-                    onChanged: (value) => print(value),
-                  ),
-                  verticalGap(context, 1),
-                  bannerSlider()
-                ],
-              ),
+            CustomSearcher(
+              controller: controller.searchController,
+              onChanged: (value) => print(value),
             ),
+            verticalGap(context, 1),
+            bannerSlider(),
             Expanded(child: body()),
           ],
         ),
@@ -56,66 +48,24 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
   }
 
   Widget body() {
-    return SizedBox(
-      child: Text(controller.allBanners!.length.toString()),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          HeaderRow(
+            title: 'Categories',
+            actionText: 'View all',
+            onTap: () {
+              // handle tap
+            },
+          ),
+          SizedBox(
+            child: Text(controller.allCategories!.length.toString()),
+          ),
+        ],
+      ),
     );
   }
 
-  Widget bannerSlider(){
-    return Obx(() {
-        return Column(
-          children: [
-            SizedBox(
-              height: Get.height / 7,
-              child: CarouselSlider.builder(
-                itemCount: controller.allBanners?.length,
-                itemBuilder: (BuildContext context, int index, int realIndex) {
-                  return Container(
-                    decoration: BoxDecoration(
-                        color : Colors.transparent,
-                        borderRadius: const BorderRadius.all(Radius.circular(10)),
-                        image: DecorationImage(
-                            image:NetworkImage(controller.allBanners?[index].imageFullUrl ?? ""),
-                            fit: BoxFit.cover
-                        )
-                    ),
-                  );
-                },
-                options: CarouselOptions(
-                  height: MediaQuery.of(context).size.height, // Adjust height accordingly
-                  autoPlay: true,  // Enable auto-play
-                  autoPlayInterval: const Duration(seconds: 3),  // Time between transitions
-                  enlargeCenterPage: true, // Enlarge the current item
-                  viewportFraction: 1.0, // Display one item at a time
-                  onPageChanged: (index, reason) {
-                    controller.changePage(index);
-                  },
-                ),
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(controller.allBanners!.length, (index) {
-                return InkWell(
-                  onTap: () => controller.changePage(index),
-                  child: Container(
-                    width: controller.selectedPage.value == index ? 7.0 : 5.0,
-                    height: controller.selectedPage.value == index ? 7.0 : 5.0,
-                    margin: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 4.0),
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(Radius.circular(7)),
-                      color: controller.selectedPage.value == index
-                          ? AppColors.baseColor
-                          : Colors.grey.shade300,
-                    ),
-                  ),
-                );
-              }),
-            ),
-          ],
-        );
-    });
-  }
 
   Widget appBar() {
     return Row(
@@ -141,4 +91,91 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
       ],
     );
   }
+
+  Widget bannerSlider() {
+    return Obx(() {
+      return controller.isLoadingBanners.value == true
+          ? Skeletonizer(
+            enabled: true,
+            child: Column(
+              children: [
+                Container(
+                  height: Get.height / 7,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade300,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(5, (index) {
+                    return Container(
+                      width: 6,
+                      height: 6,
+                      margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade300,
+                        borderRadius: BorderRadius.circular(7),
+                      ),
+                    );
+                  }),
+                ),
+              ],
+            ),
+          )
+          : Column(
+            children: [
+              SizedBox(
+                height: Get.height / 7,
+                child: CarouselSlider.builder(
+                  itemCount: controller.allBanners?.length ?? 0,
+                  itemBuilder: (BuildContext context, int index, int realIndex) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        borderRadius: const BorderRadius.all(Radius.circular(10)),
+                        image: DecorationImage(
+                          image: NetworkImage(controller.allBanners?[index].imageFullUrl ?? ""),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    );
+                  },
+                  options: CarouselOptions(
+                    height: MediaQuery.of(context).size.height,
+                    autoPlay: true,
+                    autoPlayInterval: const Duration(seconds: 3),
+                    enlargeCenterPage: true,
+                    viewportFraction: 1.0,
+                    onPageChanged: (index, reason) {
+                      controller.changePage(index);
+                    },
+                  ),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(controller.allBanners?.length ?? 0, (index) {
+                  return InkWell(
+                    onTap: () => controller.changePage(index),
+                    child: Container(
+                      width: controller.selectedPage.value == index ? 7.0 : 5.0,
+                      height: controller.selectedPage.value == index ? 7.0 : 5.0,
+                      margin: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 4.0),
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.all(Radius.circular(7)),
+                        color: controller.selectedPage.value == index
+                            ? AppColors.baseColor
+                            : Colors.grey.shade300,
+                      ),
+                    ),
+                  );
+                }),
+              ),
+            ],
+          );
+    });
+  }
+
 }
