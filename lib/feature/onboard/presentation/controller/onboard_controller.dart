@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:six_am_tech_task/feature/onboard/data/model/banners_response_body.dart';
+import 'package:six_am_tech_task/feature/onboard/data/model/popular_food_response_body.dart';
 import 'package:six_am_tech_task/feature/onboard/data/repository/onboard_repository.dart';
 
 
@@ -10,9 +11,12 @@ class OnBoardController extends GetxController {
 
   List<Banners>? allBanners = [];
   List<Category>? allCategories = [];
+  List<Products>? allPopularFood = [];
 
   RxBool isLoadingBanners = false.obs;
   RxBool isLoadingCategories = false.obs;
+  RxBool isLoadingPopularFood = false.obs;
+
 
   TextEditingController searchController = TextEditingController();
 
@@ -39,8 +43,18 @@ class OnBoardController extends GetxController {
     isLoadingCategories.value = false;
   }
 
+  Future<void> getAllPopularFood() async {
+    isLoadingPopularFood.value = true;
+    final result = await onBoardRepository.getPopularFood();
+    if (result != null) {
+      allPopularFood = result;
+    }
+    isLoadingPopularFood.value = false;
+  }
+
   void initAll() {
     getAllBanners();
-    getAllCategories();
+   // getAllCategories();
+    getAllPopularFood();
   }
 }

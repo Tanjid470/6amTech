@@ -5,6 +5,7 @@ import 'package:six_am_tech_task/core/utils/network/api_client.dart';
 import 'package:six_am_tech_task/core/utils/network/dio_header.dart';
 import 'package:six_am_tech_task/feature/onboard/data/model/banners_response_body.dart';
 import 'package:six_am_tech_task/feature/onboard/data/model/categories_response_body.dart';
+import 'package:six_am_tech_task/feature/onboard/data/model/popular_food_response_body.dart';
 
 class OnBoardRepository {
   Dio dio = Dio();
@@ -19,6 +20,26 @@ class OnBoardRepository {
       BannersResponse data = BannersResponse.fromJson(response.data);
       if (response.statusCode == 200) {
         return data.banners?.toList();
+      }
+      else {
+        return null;
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return null;
+  }
+
+  Future<List<Products>?> getPopularFood() async {
+    try {
+      dio = await ApiClient.dioClient(true);
+      Response response = await dio.get(
+        UrlConst.popularFood,
+        options: dioHeader(),
+      );
+      PopularFoodResponse data = PopularFoodResponse.fromJson(response.data);
+      if (response.statusCode == 200) {
+        return data.products?.toList();
       }
       else {
         return null;
