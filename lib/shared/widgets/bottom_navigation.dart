@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:six_am_tech_task/config/font_constant.dart';
 import 'package:six_am_tech_task/core/utils/const/app_colors.dart';
-import 'package:six_am_tech_task/feature/onboard/presentation/onboard_screen.dart';
+import 'package:six_am_tech_task/feature/onboard/presentation/screens/onboard_screen.dart';
 
 
 class BottomNavigationWidget extends StatefulWidget {
@@ -28,9 +28,9 @@ class BottomNavigationWidgetState extends State<BottomNavigationWidget> {
         physics: const NeverScrollableScrollPhysics(),
         children:  [
           const OnBoardScreen(),
-          const OnBoardScreen(),
-          const OnBoardScreen(),
-          const OnBoardScreen(),
+          Center(child: Text('Favorite',style: TextStyle(fontSize: TextSize.font26(context),fontWeight: FontWeight.bold))),
+          Center(child: Text('List',style: TextStyle(fontSize: TextSize.font26(context),fontWeight: FontWeight.bold))),
+          Center(child: Text('Menu',style: TextStyle(fontSize: TextSize.font26(context),fontWeight: FontWeight.bold))),
         ],
       ),
       bottomNavigationBar: Stack(
@@ -60,9 +60,9 @@ class BottomNavigationWidgetState extends State<BottomNavigationWidget> {
               BottomNavigationBarItem(
                   icon: Icon(Icons.home_filled,size: TextSize.font26(context)),
                   label: 'Home'),
-              BottomNavigationBarItem(icon: Icon(Icons.favorite_border,size: TextSize.font26(context)),label: 'Learning'),
-              BottomNavigationBarItem(icon: Icon(Icons.note_alt_outlined,size: TextSize.font26(context)),label: 'Games'),
-              BottomNavigationBarItem(icon: Icon(Icons.menu,size: TextSize.font26(context)),label: 'Exam'),
+              BottomNavigationBarItem(icon: Icon(Icons.favorite_border,size: TextSize.font26(context)),label: 'Favorite'),
+              BottomNavigationBarItem(icon: Icon(Icons.note_alt_outlined,size: TextSize.font26(context)),label: 'List'),
+              BottomNavigationBarItem(icon: Icon(Icons.menu,size: TextSize.font26(context)),label: 'Menu'),
             ],
             currentIndex: selectedIndex,
             unselectedLabelStyle: TextStyle(fontSize: TextSize.font14(context),fontWeight: FontWeight.w400),
