@@ -4,5 +4,6 @@ class AppColors{
   AppColors._();
   static Color baseColor = Colors.green;
   static Color greyColor =  Colors.grey;
+  static Color black =  Colors.black;
 
 }
