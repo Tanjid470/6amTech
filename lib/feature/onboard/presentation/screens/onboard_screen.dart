@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:six_am_tech_task/config/font_constant.dart';
 import 'package:six_am_tech_task/core/utils/const/app_colors.dart';
 import 'package:six_am_tech_task/feature/onboard/presentation/controller/onboard_controller.dart';
+import 'package:six_am_tech_task/feature/onboard/presentation/screens/widget/popular_food_card.dart';
 import 'package:six_am_tech_task/shared/widgets/custom_searcher.dart';
 import 'package:six_am_tech_task/shared/widgets/header_row.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -51,16 +52,7 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          HeaderRow(
-            title: 'Categories',
-            actionText: 'View all',
-            onTap: () {
-              // handle tap
-            },
-          ),
-          SizedBox(
-            child: Text(controller.allCategories!.length.toString()),
-          ),
+          popularFoodNearby()
         ],
       ),
     );
@@ -176,6 +168,76 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
             ],
           );
     });
+  }
+
+  Widget popularFoodNearby(){
+    return Column(
+      children: [
+        HeaderRow(
+          title: 'Popular Food Nearby',
+          actionText: 'View all',
+          onTap: () {
+            // handle tap
+          },
+        ),
+        verticalGap(context, 1),
+        Obx(() {
+          return controller.isLoadingPopularFood.value == true
+              ? Skeletonizer(
+            enabled: true,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: List.generate(4, (index) {
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: SizedBox(
+                      width: Get.width * 0.5,
+                      child: const PopularFoodCard(
+                        title: "title",
+                        description: "description",
+                        imageUrl: "",
+                        originalPrice: 0,
+                        rating: 0,
+                      ),
+                    ),
+                  );
+                }),
+              ),
+            ),
+          )
+              : SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: controller.allPopularFood
+                  ?.asMap()
+                  .entries
+                  .map((entry) {
+                var food = entry.value;
+                final isSingle = controller.allPopularFood?.length == 1;
+
+                return Padding(
+                  padding: EdgeInsets.only(right: isSingle ? 0 : 8),
+                  child: SizedBox(
+                    width: isSingle
+                        ? Get.width * 0.5
+                        : Get.width * 0.5,
+                    child: PopularFoodCard(
+                      title: food.name ?? "",
+                      description: food.restaurantName ?? "",
+                      imageUrl: food.imageFullUrl ?? "",
+                      originalPrice: food.price ?? 0,
+                      rating: food.avgRating ?? 0,
+                    ),
+                  ),
+                );
+              }).toList() ??
+                  [],
+            ),
+          );
+        }),
+      ],
+    );
   }
 
 }
