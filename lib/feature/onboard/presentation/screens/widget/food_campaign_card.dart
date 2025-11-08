@@ -126,31 +126,36 @@ class FoodCampaignCard extends StatelessWidget {
                   ),
                   randomStarRow(),
                   Row(
-                    spacing: 3,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
-                        '\$ $originalPrice',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: customTextStyle(context,
-                            fontSize: TextSize.font12(context),
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.black),
+                      Row(
+                        spacing: 3,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            '\$ $originalPrice',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: customTextStyle(context,
+                                fontSize: TextSize.font12(context),
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.black),
+                          ),
+                          horizontalGap(context, 1),
+                          Text(
+                            discount.toStringAsFixed(2),
+                            style: TextStyle(
+                              fontSize: TextSize.font12(context),
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey,
+                              decoration: TextDecoration.lineThrough,
+                              decorationColor: Colors.grey,
+                              decorationThickness: 2,
+                            ),
+                          ),
+                        ],
                       ),
-                      horizontalGap(context, 1),
-                      Text(
-                        discount.toStringAsFixed(2),
-                        style: TextStyle(
-                          fontSize: TextSize.font12(context),
-                          fontWeight: FontWeight.bold,
-                          color: Colors.orange,
-                          decoration: TextDecoration.lineThrough,
-                          decorationColor: Colors.black,
-                          decorationThickness: 2,
-                        ),
-                      ),
+                      Icon(Icons.add,color: AppColors.black,size: TextSize.font28(context))
                     ],
                   ),
                 ],
@@ -169,7 +174,7 @@ class FoodCampaignCard extends StatelessWidget {
     return Row(
       children: List.generate(
         starCount,
-            (index) => const Icon(Icons.star, color: Colors.amber, size: 16),
+            (index) => const Icon(Icons.star, color: Colors.green, size: 16),
       ),
     );
   }
