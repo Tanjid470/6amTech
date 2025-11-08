@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
           displayColor: Colors.black,
         ),
       ),
-      debugShowCheckedModeBanner: true,
+      debugShowCheckedModeBanner: false,
       home: const BottomNavigationWidget(),
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
