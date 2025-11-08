@@ -80,7 +80,8 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
             horizontalGap(context, 1),
             Text("76A eighth evenue, New York, US",
               style: TextStyle(
-                color: AppColors.greyColor,
+                color: Colors.black54,
+                fontWeight: FontWeight.bold,
                 fontSize: TextSize.font14(context)
               ),
             ),
