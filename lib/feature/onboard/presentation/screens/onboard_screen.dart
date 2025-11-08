@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:six_am_tech_task/config/font_constant.dart';
 import 'package:six_am_tech_task/core/utils/const/app_colors.dart';
+import 'package:six_am_tech_task/feature/onboard/presentation/controller/onboard_controller.dart';
 
 class OnBoardScreen extends StatefulWidget {
   const OnBoardScreen({super.key});
@@ -10,7 +12,13 @@ class OnBoardScreen extends StatefulWidget {
 }
 
 class _OnBoardScreenState extends State<OnBoardScreen> {
+  OnBoardController controller = Get.put(OnBoardController());
 
+  @override
+  void initState() {
+    controller.getAllBanners();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,14 +26,16 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
       body: Column(
         children: [
           appBar(),
-         // body(),
+          body(),
         ],
       ),
     );
   }
 
   Widget body() {
-    return SizedBox();
+    return SizedBox(
+      child: Text(controller.allBanners!.length.toString()),
+    );
   }
 
   Widget appBar() {
